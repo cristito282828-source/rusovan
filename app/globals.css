@@ -1,0 +1,495 @@
+@import 'tailwindcss';
+
+@plugin "@tailwindcss/container-queries";
+@plugin "@tailwindcss/typography";
+
+:root {
+  /* ============================================================
+     Rvan · Monograma RV marrón chocolate sobre crema.
+     Paleta editorial boutique: marrón + crema + amarillo signature.
+     ============================================================ */
+  --brand-primary: #FFD93D;        /* Amarillo signature (promo bar) */
+  --brand-secondary: #3A2418;      /* Marrón chocolate — sale del logo (CTA) */
+  --brand-secondary-dark: #2A180E; /* Marrón oscuro (hover) */
+  --brand-bg: #FFFFFF;             /* Blanco puro (cards) */
+  --brand-cream: #FBF7EE;          /* Crema cálida (secciones alternas, coincide con PNG del logo) */
+  --brand-ink: #2A180E;            /* Tinta marrón para texto */
+  --brand-muted: #7A6B5C;          /* Marrón gris para subtexto */
+  --brand-line: #E6DFD0;           /* Hairline cálida */
+  --brand-soft: #F2EBDA;           /* Crema más oscura */
+
+  /* Variables para temas claro/oscuro */
+  --background: var(--brand-bg);
+  --foreground: var(--brand-ink);
+
+  /* Tipografía editorial única */
+  --font-inter: var(--font-inter);
+  --font-moderat: var(--font-moderat);
+  --font-belleza: var(--font-belleza);
+}
+
+@layer base {
+  *,
+  ::after,
+  ::before,
+  ::backdrop,
+  ::file-selector-button {
+    border-color: var(--color-gray-200, currentColor);
+  }
+
+  html {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    overflow-x: hidden;
+    scroll-behavior: smooth;
+  }
+
+  body {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    overflow-x: hidden;
+  }
+
+  /* Smooth scroll para navegadores que no soportan scroll-behavior */
+  @supports not (scroll-behavior: smooth) {
+    html {
+      scroll-behavior: auto;
+    }
+  }
+
+  /* Respetar preferencia de movimiento reducido */
+  @media (prefers-reduced-motion: reduce) {
+    html {
+      scroll-behavior: auto;
+    }
+
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+    }
+  }
+}
+
+@media (prefers-color-scheme: dark) {
+  html {
+    color-scheme: dark;
+  }
+
+  :root {
+    --background: var(--brand-primary);
+    --foreground: var(--brand-secondary);
+  }
+}
+
+@supports (font: -apple-system-body) and (-webkit-appearance: none) {
+  img[loading='lazy'] {
+    clip-path: inset(0.6px);
+  }
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-inter), system-ui, sans-serif;
+  font-weight: 400;
+  letter-spacing: -0.005em;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* El logo PNG trae fondo crema; al body se le pinta crema-suave para que no "isla" */
+@supports not (color: oklch(0% 0% 0%)) {
+  body { background: var(--brand-bg); }
+}
+
+/* Editorial: títulos en Inter con peso bold/black y tracking apretado */
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-inter), system-ui, sans-serif;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+}
+
+a,
+input,
+button {
+  @apply focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-neutral-400 focus-visible:ring-offset-2 focus-visible:ring-offset-neutral-50 dark:focus-visible:ring-neutral-600 dark:focus-visible:ring-offset-neutral-900;
+}
+
+/* Font utilities */
+.font-belleza {
+  font-family: var(--font-belleza), serif;
+}
+
+.font-moderat {
+  font-family: var(--font-moderat), sans-serif;
+}
+
+.font-inter {
+  font-family: var(--font-inter), system-ui, sans-serif;
+}
+
+/* Skeleton shimmer animation */
+@keyframes shimmer {
+  0% {
+    background-position: -200% 0;
+  }
+  100% {
+    background-position: 200% 0;
+  }
+}
+
+/* =============================================================
+   Rvan · Brand utilities (Tailwind v4 @theme inline)
+   ============================================================= */
+@theme inline {
+  --color-rvan-primary: var(--brand-primary);
+  --color-rvan-secondary: var(--brand-secondary);
+  --color-rvan-secondary-dark: var(--brand-secondary-dark);
+  --color-rvan-bg: var(--brand-bg);
+  --color-rvan-cream: var(--brand-cream);
+  --color-rvan-ink: var(--brand-ink);
+  --color-rvan-muted: var(--brand-muted);
+  --color-rvan-line: var(--brand-line);
+  --color-rvan-soft: var(--brand-soft);
+}
+
+.bg-rvan-cream { background-color: var(--brand-cream); }
+.bg-rvan-bg { background-color: var(--brand-bg); }
+.bg-rvan-soft { background-color: var(--brand-soft); }
+.bg-rvan-secondary { background-color: var(--brand-secondary); }
+.bg-rvan-ink { background-color: var(--brand-ink); }
+.bg-rvan-primary { background-color: var(--brand-primary); } /* alias amarillo */
+
+.text-rvan-primary { color: var(--brand-primary); }
+.text-rvan-secondary { color: var(--brand-secondary); }
+.text-rvan-ink { color: var(--brand-ink); }
+.text-rvan-muted { color: var(--brand-muted); }
+
+.border-rvan-line { border-color: var(--brand-line); }
+.border-rvan-ink { border-color: var(--brand-ink); }
+
+/* =============================================================
+   Rvan · Componentes utilitarios (Editorial Kikkerland/Fatboy)
+   ============================================================= */
+
+/* Tag estilo "etiqueta" — chip minimalista con tracking amplio */
+.rvan-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-family: var(--font-inter), system-ui, sans-serif;
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--brand-ink);
+}
+
+/* Botón sólido · coral, minimalista */
+.btn-rvan {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 0.95rem 1.6rem;
+  border-radius: 9999px;
+  background: var(--brand-secondary);
+  color: var(--brand-bg);
+  font-family: var(--font-inter), system-ui, sans-serif;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  transition: background 0.15s ease, transform 0.15s ease;
+}
+.btn-rvan:hover {
+  background: var(--brand-secondary-dark);
+  transform: translateY(-1px);
+}
+
+/* Botón outline sutil · estilo Kikkerland */
+.btn-rvan-outline {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 0.9rem 1.5rem;
+  border-radius: 9999px;
+  background: transparent;
+  color: var(--brand-ink);
+  border: 1.5px solid var(--brand-ink);
+  font-family: var(--font-inter), system-ui, sans-serif;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  transition: background 0.15s ease, color 0.15s ease;
+}
+.btn-rvan-outline:hover {
+  background: var(--brand-ink);
+  color: var(--brand-bg);
+}
+
+/* CTA link plano (estilo Kikkerland "Shop now") */
+.btn-rvan-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-family: var(--font-inter), system-ui, sans-serif;
+  font-weight: 700;
+  letter-spacing: -0.005em;
+  color: var(--brand-ink);
+  text-decoration: underline;
+  text-underline-offset: 4px;
+  text-decoration-thickness: 1.5px;
+}
+
+/* Sticky promo bar Kikkerland-style · amarillo signature */
+.rvan-promo-bar {
+  background: var(--brand-primary);
+  color: var(--brand-ink);
+  font-family: var(--font-inter), system-ui, sans-serif;
+  font-size: 0.8rem;
+  font-weight: 700;
+  letter-spacing: -0.005em;
+}
+.rvan-promo-bar strong { color: var(--brand-ink); }
+
+/* Toast slide-in bounce animation */
+@keyframes slideInBounce {
+  0% {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+  60% {
+    transform: translateX(-10px);
+    opacity: 1;
+  }
+  80% {
+    transform: translateX(5px);
+  }
+  100% {
+    transform: translateX(0);
+  }
+}
+
+/* Fade in animation for accordion content */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-fadeIn {
+  animation: fadeIn 0.3s ease-out;
+}
+
+/* Image hover effects premium */
+.image-hover-zoom {
+  transition: transform 0.7s cubic-bezier(0.4, 0, 0.2, 1), filter 0.7s ease;
+}
+
+.image-hover-zoom:hover {
+  transform: scale(1.08);
+  filter: brightness(1.05);
+}
+
+.image-overlay {
+  transition: opacity 0.4s ease;
+}
+
+/* Cursor personalizado para productos */
+.product-card {
+  cursor: pointer;
+  transition: transform 0.3s ease;
+}
+
+.product-card:hover {
+  transform: translateY(-4px);
+}
+
+.product-card:active {
+  transform: translateY(-2px);
+}
+
+/* Search dropdown animation */
+@keyframes slideDownFade {
+  0% {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-slideDownFade {
+  animation: slideDownFade 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Mobile menu stagger animation */
+@keyframes fadeInStagger {
+  0% {
+    opacity: 0;
+    transform: translateX(-20px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+/* Custom Scrollbar Styles */
+.scrollbar-thin::-webkit-scrollbar {
+  height: 6px;
+  width: 6px;
+}
+
+.scrollbar-thin::-webkit-scrollbar-track {
+  background: transparent;
+  border-radius: 10px;
+}
+
+.scrollbar-thin::-webkit-scrollbar-thumb {
+  background: #d1d5db;
+  border-radius: 10px;
+  transition: background 0.3s ease;
+}
+
+.scrollbar-thin::-webkit-scrollbar-thumb:hover {
+  background: #9ca3af;
+}
+
+/* Scrollbar oscura para modal */
+.scrollbar-thumb-white\/30::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.3);
+}
+
+.scrollbar-thumb-white\/30::-webkit-scrollbar-thumb:hover,
+.hover\:scrollbar-thumb-white\/50:hover::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.5);
+}
+
+/* Firefox scrollbar */
+.scrollbar-thin {
+  scrollbar-width: thin;
+  scrollbar-color: #d1d5db transparent;
+}
+
+.scrollbar-thin:hover {
+  scrollbar-color: #9ca3af transparent;
+}
+
+.scrollbar-thumb-white\/30 {
+  scrollbar-color: rgba(255, 255, 255, 0.3) transparent;
+}
+
+.scrollbar-thumb-white\/30:hover,
+.hover\:scrollbar-thumb-white\/50:hover {
+  scrollbar-color: rgba(255, 255, 255, 0.5) transparent;
+}
+
+/* ============================================================================
+   ACCESSIBILITY MEJORADO - WCAG 2.1 AA Compliance
+   ============================================================================ */
+
+/* Skip Links para navegación por teclado */
+.skip-link {
+  position: absolute;
+  top: -40px;
+  left: 0;
+  background: #101828;
+  color: white;
+  padding: 8px 16px;
+  text-decoration: none;
+  z-index: 100;
+  border-radius: 0 0 4px 0;
+  transition: top 0.3s;
+}
+
+.skip-link:focus {
+  top: 0;
+}
+
+/* Focus visible mejorado - Alto contraste para accesibilidad */
+*:focus-visible {
+  outline: 2px solid #101828 !important;
+  outline-offset: 2px !important;
+  border-radius: 4px;
+}
+
+/* Focus específico para botones */
+button:focus-visible,
+a:focus-visible,
+[role="button"]:focus-visible {
+  outline: 2px solid #101828 !important;
+  outline-offset: 2px !important;
+}
+
+/* Mejorar contraste de texto gray-400 a gray-500 (WCAG AA) */
+.text-gray-400 {
+  color: rgb(107, 114, 128) /* gray-500 - ratio 7:1 sobre blanco */;
+}
+
+/* Hover states con mejor contraste */
+.text-gray-400:hover {
+  color: rgb(55, 65, 81) /* gray-700 - ratio 12:1 sobre blanco */;
+}
+
+/* Links con focus visible */
+a:focus,
+button:focus {
+  outline: 2px solid #101828;
+  outline-offset: 2px;
+}
+
+/* Ocultar visualmente pero mantener accesible para screen readers */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border-width: 0;
+}
+
+/* Mostrar al recibir foco */
+.sr-only-focusable:focus {
+  position: static;
+  width: auto;
+  height: auto;
+  padding: inherit;
+  margin: inherit;
+  overflow: visible;
+  clip: auto;
+  white-space: normal;
+}
+
+/* Asegurar que iconos decorativos no sean leídos por screen readers */
+.icon-decorative {
+  aria-hidden: 'true';
+}
+
+/* Mejorar contraste en badges */
+.bg-green-700.text-white {
+  background-color: rgb(21, 128, 61); /* color-600 - mejor contraste */
+}
+
+/* Focus en inputs y botones con alto contraste */
+input:focus,
+textarea:focus,
+select:focus {
+  outline: 2px solid #101828 !important;
+  outline-offset: 1px !important;
+  border-color: #101828 !important;
+  box-shadow: 0 0 0 3px rgba(16, 24, 40, 0.1) !important;
+}
