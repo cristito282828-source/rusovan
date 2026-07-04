@@ -69,7 +69,7 @@ export default async function CategoryPage(props: {
 
   // Si es una macro (home/pets/lifestyle) → manejamos aquí
   if (VALID_MACROS.has(collection)) {
-    const macro = MACROS[collection];
+    const macro: CollectionMap = MACROS[collection]!;
 
     // Productos del WPGraphQL con filtro básico por nombre (heurística: contiene palabra clave).
     // Mientras no haya una taxonomía WP por macro, usamos esta aproximación.
@@ -79,7 +79,7 @@ export default async function CategoryPage(props: {
       const productsQueryModule: any = await import('@/lib/woocommerce/queries/product');
       const { woocommerceFetch } = wooModule;
       const { getProductsQuery } = productsQueryModule;
-      const res = await woocommerceFetch<any>({
+      const res = await woocommerceFetch({
         query: getProductsQuery,
         variables: { search: macro.title }
       });
@@ -187,7 +187,7 @@ export default async function CategoryPage(props: {
     const productsQueryModule = await import('@/lib/woocommerce/queries/product');
     const { getProductsByCategoryQuery } = productsQueryModule;
     try {
-      const res = await woocommerceFetch<any>({
+      const res = await woocommerceFetch({
         query: getProductsByCategoryQuery,
         variables: { category: collection }
       });

@@ -35,7 +35,7 @@ export default function RotatingHeadline({
   rotationMs?: number;
 }) {
   const idx = Math.floor(Date.now() / rotationMs) % PHRASES.length;
-  const phrase = PHRASES[idx];
+  const phrase: Phrase = PHRASES[idx]!;
 
   return (
     <>
