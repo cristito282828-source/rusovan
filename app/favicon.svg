@@ -1,9 +1,16 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
-  <rect width="100" height="100" rx="20" fill="#111827"/>
-  <text x="50" y="72"
-        font-family="Arial, sans-serif"
-        font-size="60"
-        font-weight="bold"
-        text-anchor="middle"
-        fill="#ffffff">R</text>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
+  <!-- Fondo crema, igual al PNG del logo original. -->
+  <rect width="64" height="64" rx="12" fill="#FBF7EE" />
+  <!-- Monograma "RV" marrón chocolate, simulando el wordmark serif del logo. -->
+  <text
+    x="32" y="44"
+    text-anchor="middle"
+    font-family="'Playfair Display', 'Times New Roman', serif"
+    font-weight="700"
+    font-size="34"
+    letter-spacing="-1.5"
+    fill="#3A2418"
+  >RV</text>
+  <!-- Destello discreto abajo a la derecha (referencia al logo PNG original). -->
+  <circle cx="52" cy="52" r="1.4" fill="#FFD93D" />
 </svg>

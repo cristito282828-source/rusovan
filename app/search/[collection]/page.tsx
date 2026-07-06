@@ -1,8 +1,6 @@
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import type { Metadata } from 'next';
-import HeaderRvan from '@/components/brand/HeaderRvan';
-import FooterRvan from '@/components/brand/FooterRvan';
 import ProductCardRvan from '@/components/brand/ProductCardRvan';
 
 const VALID_MACROS = new Set(['home', 'pets', 'lifestyle']);
@@ -102,7 +100,6 @@ export default async function CategoryPage(props: {
 
     return (
       <>
-        <HeaderRvan />
         <main id="main-content" className="min-h-screen bg-rvan-bg">
           {/* Hero de macro con imagen y copy específico */}
           <section className="border-b border-rvan-ink bg-rvan-bg">
@@ -174,7 +171,6 @@ export default async function CategoryPage(props: {
             </div>
           </section>
         </main>
-        <FooterRvan />
       </>
     );
   }
@@ -215,7 +211,6 @@ export default async function CategoryPage(props: {
 
   return (
     <>
-      <HeaderRvan />
       <main id="main-content" className="min-h-screen bg-rvan-bg">
         <section className="border-b border-rvan-ink bg-rvan-bg">
           <div className="mx-auto max-w-7xl px-6 py-12 lg:px-8">
@@ -262,7 +257,6 @@ export default async function CategoryPage(props: {
           </div>
         </section>
       </main>
-      <FooterRvan />
     </>
   );
 }

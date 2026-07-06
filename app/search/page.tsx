@@ -1,7 +1,5 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
-import HeaderRvan from '@/components/brand/HeaderRvan';
-import FooterRvan from '@/components/brand/FooterRvan';
 import ProductCardRvan from '@/components/brand/ProductCardRvan';
 
 export const metadata: Metadata = {
@@ -41,7 +39,6 @@ export default async function SearchPage() {
 
   return (
     <>
-      <HeaderRvan />
       <main id="main-content" className="min-h-screen bg-rvan-bg">
         {/* Header de catálogo · estilo Kikkerland ALL CAPS eyebrow + headline */}
         <section className="border-b border-rvan-ink bg-rvan-bg">
@@ -85,7 +82,6 @@ export default async function SearchPage() {
           </div>
         </section>
       </main>
-      <FooterRvan />
     </>
   );
 }

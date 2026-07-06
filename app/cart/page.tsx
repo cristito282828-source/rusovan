@@ -2,7 +2,7 @@
 
 import Link from 'next/link';
 import Image from 'next/image';
-import { ArrowLeft, Minus, Plus, Trash2 } from 'lucide-react';
+import { Minus, Plus, Trash2 } from 'lucide-react';
 import { useCart } from '@/components/providers/CartProvider';
 
 interface LocalCartItem {
@@ -25,35 +25,49 @@ interface LocalCartItem {
 }
 
 /**
- * PÁGINA DEL CARRITO - WooCommerce
- * Client Component que usa el contexto del carrito
+ * /cart · Rvan
+ * Layout 2 columnas desktop: items (izq) + resumen (der sticky).
+ * Paleta y tipografía editorial unificadas con el resto del sitio.
  */
 
-function EmptyCartMessage() {
+/** Vacío: bolsa marrón dibujada en SVG, sin ícono chiquito genérico. */
+function EmptyBagSvg() {
   return (
-    <div className="min-h-[60vh] flex items-center justify-center">
-      <div className="text-center">
-        <div className="w-24 h-24 mx-auto mb-6 rounded-full bg-gray-100 flex items-center justify-center">
-          <svg className="w-12 h-12 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
-          </svg>
-        </div>
-        <h1 className="font-belleza text-3xl font-light text-gray-900 mb-3">Tu carrito está vacío</h1>
-        <p className="text-gray-600 mb-8 max-w-md mx-auto">
-          Parece que aún no has agregado productos. Explora nuestro catálogo y encuentra lo que buscas.
-        </p>
-        <Link
-          href="/search"
-          className="inline-flex items-center gap-2 bg-green-700 text-white px-8 py-3 rounded-lg hover:bg-green-800 transition-colors font-medium"
-        >
-          Explorar Productos
-        </Link>
-      </div>
-    </div>
+    <svg viewBox="0 0 64 64" className="h-12 w-12" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+      <path d="M14 22 H50 L46 56 H18 Z" />
+      <path d="M24 30 a8 8 0 0 1 16 0" />
+    </svg>
   );
 }
 
-function CartItemCard({ item, onUpdateQuantity, onRemove }: {
+function EmptyCartMessage() {
+  return (
+    <main id="main-content" className="min-h-[60vh] bg-rvan-bg">
+      <div className="mx-auto flex max-w-md flex-col items-center px-6 py-24 text-center">
+        <span className="rvan-tag">Carrito</span>
+        <div className="mt-6 flex h-20 w-20 items-center justify-center rounded-full border border-rvan-ink bg-rvan-cream text-rvan-ink">
+          <EmptyBagSvg />
+        </div>
+        <h1 className="mt-6 font-inter text-3xl font-bold leading-tight tracking-tight text-rvan-ink md:text-4xl">
+          Tu carrito está vacío.
+        </h1>
+        <p className="mt-3 font-inter text-base leading-relaxed text-rvan-muted">
+          Parece que aún no has agregado productos. Explora el catálogo y elige los tuyos.
+        </p>
+        <Link href="/search" className="btn-rvan mt-8">
+          Explorar catálogo
+          <span aria-hidden="true">→</span>
+        </Link>
+      </div>
+    </main>
+  );
+}
+
+function CartItemCard({
+  item,
+  onUpdateQuantity,
+  onRemove,
+}: {
   item: LocalCartItem;
   onUpdateQuantity: (key: string, quantity: number) => void;
   onRemove: (key: string) => void;
@@ -62,11 +76,11 @@ function CartItemCard({ item, onUpdateQuantity, onRemove }: {
   const imageAlt = item.image?.altText || item.productName;
 
   return (
-    <div className="flex gap-4 p-4 bg-white border border-gray-200 rounded-lg hover:shadow-sm transition-shadow">
-      {/* Imagen */}
+    <div className="flex gap-4 border border-rvan-line bg-rvan-bg p-4 sm:gap-6 sm:p-5">
+      {/* Imagen cuadrada con borde ink sutil */}
       <Link
         href={`/product/${item.productSlug}`}
-        className="relative w-24 h-24 flex-shrink-0 rounded-lg overflow-hidden bg-gray-100"
+        className="relative h-24 w-24 shrink-0 overflow-hidden rounded-xl border border-rvan-line bg-rvan-cream sm:h-28 sm:w-28"
       >
         {imageUrl ? (
           <Image
@@ -74,69 +88,70 @@ function CartItemCard({ item, onUpdateQuantity, onRemove }: {
             alt={imageAlt}
             fill
             className="object-cover"
-            sizes="96px"
+            sizes="(min-width: 640px) 112px, 96px"
           />
         ) : (
-          <div className="w-full h-full flex items-center justify-center text-gray-400 text-sm">
+          <div className="flex h-full w-full items-center justify-center font-inter text-xs text-rvan-muted">
             Sin imagen
           </div>
         )}
       </Link>
 
-      {/* Info */}
-      <div className="flex-1 min-w-0">
-        <div className="flex justify-between gap-4">
-          <div className="flex-1">
+      {/* Info + controles */}
+      <div className="flex flex-1 flex-col gap-3">
+        <div className="flex items-start justify-between gap-3">
+          <div className="min-w-0 flex-1">
             <Link
               href={`/product/${item.productSlug}`}
-              className="font-moderat font-medium text-gray-900 hover:text-green-700 line-clamp-2 mb-1"
+              className="line-clamp-2 font-inter text-base font-bold leading-tight text-rvan-ink hover:text-rvan-secondary"
             >
               {item.productName}
             </Link>
 
             {item.variationSize && (
-              <p className="text-sm text-gray-500 mt-1">
+              <p className="mt-1 font-inter text-xs uppercase tracking-[0.16em] text-rvan-muted">
                 Tamaño: {item.variationSize} ml
               </p>
             )}
 
-            <p className="text-lg font-semibold text-gray-900 mt-2">
+            <p className="mt-2 font-belleza text-xl leading-none text-rvan-ink">
               {item.priceDisplay}
             </p>
           </div>
 
           <button
             onClick={() => onRemove(item.key)}
-            className="p-2 text-red-600 hover:text-red-700 hover:bg-red-50 rounded-lg transition-colors"
-            aria-label="Eliminar producto"
+            className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full text-rvan-ink transition hover:bg-rvan-ink hover:text-rvan-bg"
+            aria-label={`Eliminar ${item.productName}`}
           >
-            <Trash2 className="h-5 w-5" />
+            <Trash2 className="h-4 w-4" />
           </button>
         </div>
 
-        {/* Quantity controls */}
-        <div className="flex items-center gap-4 mt-3">
-          <span className="text-sm text-gray-600">Cantidad:</span>
-          <div className="flex items-center border border-gray-300 rounded-md">
+        {/* Cantidad */}
+        <div className="flex flex-wrap items-center gap-4">
+          <div className="flex items-center rounded-full border border-rvan-ink">
             <button
               onClick={() => onUpdateQuantity(item.key, item.quantity - 1)}
               disabled={item.quantity <= 1}
-              className="p-2 hover:bg-gray-100 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+              className="flex h-9 w-9 items-center justify-center rounded-l-full text-rvan-ink transition hover:bg-rvan-ink hover:text-rvan-bg disabled:cursor-not-allowed disabled:opacity-40"
+              aria-label="Disminuir cantidad"
             >
               <Minus className="h-3 w-3" />
             </button>
-            <span className="px-3 text-sm font-medium min-w-[3rem] text-center">
+            <span className="min-w-[3rem] text-center font-inter text-sm font-bold text-rvan-ink">
               {item.quantity}
             </span>
             <button
               onClick={() => onUpdateQuantity(item.key, item.quantity + 1)}
-              className="p-2 hover:bg-gray-100 transition-colors"
+              className="flex h-9 w-9 items-center justify-center rounded-r-full text-rvan-ink transition hover:bg-rvan-ink hover:text-rvan-bg"
+              aria-label="Aumentar cantidad"
             >
               <Plus className="h-3 w-3" />
             </button>
           </div>
-          <span className="text-sm text-gray-500">
-            Subtotal: {item.priceDisplay}
+          <span className="font-inter text-xs text-rvan-muted">
+            Subtotal · <span className="font-bold text-rvan-ink">{item.priceDisplay}</span>
           </span>
         </div>
       </div>
@@ -149,13 +164,11 @@ export default function CartPage() {
 
   if (isLoading) {
     return (
-      <main className="min-h-screen bg-white pt-36">
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-8">
-          <div className="flex items-center justify-center h-96">
-            <div className="text-center">
-              <div className="inline-block animate-spin rounded-full h-12 w-12 border-4 border-green-700 border-t-transparent mb-4"></div>
-              <p className="text-gray-600">Cargando carrito...</p>
-            </div>
+      <main id="main-content" className="min-h-[60vh] bg-rvan-bg">
+        <div className="mx-auto flex max-w-7xl items-center justify-center px-6 py-24">
+          <div className="flex flex-col items-center gap-4">
+            <div className="h-12 w-12 animate-spin rounded-full border-4 border-rvan-line border-t-rvan-ink" />
+            <p className="font-inter text-sm text-rvan-muted">Cargando tu carrito…</p>
           </div>
         </div>
       </main>
@@ -163,37 +176,48 @@ export default function CartPage() {
   }
 
   if (!cart || cart.contents.nodes.length === 0) {
-    return (
-      <main className="min-h-screen bg-white pt-36">
-        <EmptyCartMessage />
-      </main>
-    );
+    return <EmptyCartMessage />;
   }
 
-  return (
-    <>
-      <main className="min-h-screen bg-gray-50 pt-36">
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-8">
-          {/* Header */}
-          <div className="mb-8">
-            <Link
-              href="/search"
-              className="inline-flex items-center text-sm text-gray-600 hover:text-gray-900 mb-4 transition-colors"
-            >
-              <ArrowLeft className="h-4 w-4 mr-2" />
-              Continuar comprando
-            </Link>
-            <h1 className="font-belleza text-3xl lg:text-4xl font-light tracking-wide text-gray-900">
-              Tu Carrito
-            </h1>
-            <p className="text-gray-600 mt-2">
-              {cart.contents.nodes.length} {cart.contents.nodes.length === 1 ? 'producto' : 'productos'}
-            </p>
-          </div>
+  // Parseo ligero del subtotal en COP para alimentar la ATC progress bar.
+  // /[\d.]+/ extrae solo dígitos y puntos del string "$ 120.000".
+  const subtotalString = cart.subtotal || '$0';
+  const subtotalNumber = Number((subtotalString.match(/[\d.]+/) ?? ['0'])[0].replace(/\./g, '')) || 0;
+  const FREE_SHIPPING_THRESHOLD = 120000;
+  const remaining = Math.max(0, FREE_SHIPPING_THRESHOLD - subtotalNumber);
+  const progress = Math.min(100, (subtotalNumber / FREE_SHIPPING_THRESHOLD) * 100);
 
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-            {/* Items del carrito */}
-            <div className="lg:col-span-2 space-y-4">
+  return (
+    <main id="main-content" className="min-h-screen bg-rvan-bg">
+      {/* Header de carrito */}
+      <section className="border-b border-rvan-line bg-rvan-bg">
+        <div className="mx-auto max-w-7xl px-6 py-10 lg:px-8 lg:py-12">
+          <nav className="mb-4 font-inter text-xs text-rvan-muted">
+            <Link href="/" className="hover:text-rvan-secondary">Inicio</Link>
+            <span className="mx-2">/</span>
+            <span className="text-rvan-ink">Carrito</span>
+          </nav>
+          <div className="flex flex-wrap items-end justify-between gap-4">
+            <div>
+              <span className="rvan-tag">Tu pedido</span>
+              <h1 className="mt-3 font-inter text-3xl font-bold leading-tight tracking-tight text-rvan-ink md:text-5xl">
+                Carrito.
+              </h1>
+            </div>
+            <span className="font-inter text-xs font-bold uppercase tracking-[0.18em] text-rvan-muted">
+              {cart.contents.nodes.length}{' '}
+              {cart.contents.nodes.length === 1 ? 'pieza' : 'piezas'}
+            </span>
+          </div>
+        </div>
+      </section>
+
+      {/* Body */}
+      <section className="bg-rvan-cream">
+        <div className="mx-auto max-w-7xl px-6 py-12 lg:px-8 lg:py-16">
+          <div className="grid grid-cols-1 gap-10 lg:grid-cols-3 lg:gap-12">
+            {/* Items */}
+            <div className="space-y-4 lg:col-span-2">
               {cart.contents.nodes.map((item) => (
                 <CartItemCard
                   key={item.key}
@@ -202,73 +226,93 @@ export default function CartPage() {
                   onRemove={removeItem}
                 />
               ))}
+
+              {/* Sticky ATC progress bar editorial */}
+              <div className="mt-8 rounded-2xl border border-rvan-ink bg-rvan-bg p-5">
+                <div className="flex items-center justify-between">
+                  <span className="font-inter text-xs uppercase tracking-[0.18em] text-rvan-ink">
+                    {remaining > 0 ? (
+                      <>Te faltan <strong className="font-belleza text-base tracking-tight">${remaining.toLocaleString('es-CO')}</strong> para envío gratis</>
+                    ) : (
+                      <><strong className="text-rvan-primary">¡Envío gratis desbloqueado!</strong></>
+                    )}
+                  </span>
+                  <span className="font-inter text-xs font-bold text-rvan-muted">
+                    {Math.round(progress)}%
+                  </span>
+                </div>
+                <div className="mt-3 h-2 overflow-hidden rounded-full bg-rvan-soft">
+                  <div
+                    className="h-full rounded-full bg-rvan-secondary"
+                    style={{ width: `${progress}%` }}
+                    aria-hidden="true"
+                  />
+                </div>
+                <p className="mt-3 font-inter text-[11px] text-rvan-muted">
+                  Devoluciones gratis 30 días&nbsp;·&nbsp;Pago contraentrega en Bogotá, Medellín y Cali
+                </p>
+              </div>
             </div>
 
-            {/* Resumen del pedido */}
-            <div className="lg:col-span-1">
-              <div className="bg-white rounded-lg shadow-sm p-6 sticky top-32">
-                <h2 className="font-moderat text-lg font-semibold text-gray-900 mb-4">Resumen del Pedido</h2>
+            {/* Resumen */}
+            <aside className="lg:col-span-1">
+              <div className="sticky top-32 space-y-6 border border-rvan-ink bg-rvan-bg p-6">
+                <h2 className="font-inter text-xs font-bold uppercase tracking-[0.18em] text-rvan-ink">
+                  Resumen del pedido
+                </h2>
 
-                <div className="space-y-3 mb-6">
-                  <div className="flex justify-between text-sm">
-                    <span className="text-gray-600">Subtotal</span>
-                    <span className="font-medium text-gray-900">{cart.subtotal}</span>
+                <dl className="space-y-3 font-inter text-sm">
+                  <div className="flex justify-between">
+                    <dt className="text-rvan-muted">Subtotal</dt>
+                    <dd className="font-bold text-rvan-ink">{cart.subtotal}</dd>
                   </div>
 
                   {cart.shippingTotal && cart.shippingTotal !== '$0' && (
-                    <div className="flex justify-between text-sm">
-                      <span className="text-gray-600">Envío</span>
-                      <span className="font-medium text-gray-900">{cart.shippingTotal}</span>
+                    <div className="flex justify-between">
+                      <dt className="text-rvan-muted">Envío</dt>
+                      <dd className="font-bold text-rvan-ink">{cart.shippingTotal}</dd>
                     </div>
                   )}
 
                   {cart.discountTotal && cart.discountTotal !== '$0' && (
-                    <div className="flex justify-between text-sm text-green-700">
-                      <span>Descuento</span>
-                      <span className="font-medium">-{cart.discountTotal}</span>
+                    <div className="flex justify-between text-rvan-secondary">
+                      <dt>Descuento</dt>
+                      <dd className="font-bold">-{cart.discountTotal}</dd>
                     </div>
                   )}
 
                   {cart.feeTotal && cart.feeTotal !== '$0' && (
-                    <div className="flex justify-between text-sm">
-                      <span className="text-gray-600">Tarifas</span>
-                      <span className="font-medium text-gray-900">{cart.feeTotal}</span>
+                    <div className="flex justify-between">
+                      <dt className="text-rvan-muted">Tarifas</dt>
+                      <dd className="font-bold text-rvan-ink">{cart.feeTotal}</dd>
                     </div>
                   )}
 
-                  <div className="flex justify-between text-lg font-bold pt-3 border-t border-gray-200">
-                    <span>Total</span>
-                    <span className="text-green-700">{cart.total}</span>
+                  <div className="flex items-baseline justify-between border-t border-rvan-line pt-4">
+                    <dt className="font-inter text-xs font-bold uppercase tracking-[0.18em] text-rvan-ink">
+                      Total
+                    </dt>
+                    <dd className="font-belleza text-3xl leading-none text-rvan-ink">
+                      {cart.total}
+                    </dd>
                   </div>
-                </div>
+                </dl>
 
-                <Link
-                  href="/checkout"
-                  className="block w-full bg-green-700 text-white text-center py-3 px-6 rounded-lg font-moderat font-medium hover:bg-green-800 transition-colors mb-3"
-                >
-                  Finalizar Compra
+                <Link href="/checkout" className="btn-rvan w-full text-center">
+                  Finalizar compra
                 </Link>
 
                 <Link
                   href="/search"
-                  className="block text-center text-sm text-gray-600 hover:text-gray-900 transition-colors"
+                  className="block text-center font-inter text-sm text-rvan-muted underline-offset-4 hover:text-rvan-ink hover:underline"
                 >
                   Continuar comprando
                 </Link>
-
-                {/* Envío gratis */}
-                {cart.subtotal && (
-                  <div className="mt-6 p-4 bg-green-50 rounded-lg border border-green-200">
-                    <p className="text-sm text-green-800">
-                      💚 Envío gratis en pedidos superiores a $80.000 CLP
-                    </p>
-                  </div>
-                )}
               </div>
-            </div>
+            </aside>
           </div>
         </div>
-      </main>
-    </>
+      </section>
+    </main>
   );
 }

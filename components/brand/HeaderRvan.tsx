@@ -1,5 +1,6 @@
 import Link from 'next/link';
 import LogoRvan from './LogoRvan';
+import SearchModalRvan from './SearchModalRvan';
 
 const MACROS = [
   { href: '/search/home', label: 'Home' },
@@ -14,8 +15,11 @@ const SECONDARY = [
 ];
 
 /**
- * Header Rvan · sticky bar amarillo + nav minimal.
+ * Header Rvan · sticky bar amarillo + nav minimal + buscador modal.
  * 3 macros primero (Home / Pets / Lifestyle), luego secundarios.
+ *
+ * El buscador es un modal accesible (Esc para cerrar, foco automático en abrir)
+ * que al submit redirige a /search?q=... para reusar el flujo del WPGraphQL.
  */
 export default function HeaderRvan() {
   return (
@@ -69,6 +73,7 @@ export default function HeaderRvan() {
             >
               Ingresar
             </Link>
+            <SearchModalRvan />
             <Link href="/carrito" className="btn-rvan">
               <svg viewBox="0 0 24 24" className="h-4 w-4" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
                 <path d="M6 7h13l-1.5 9h-11z" />
